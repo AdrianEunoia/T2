@@ -25,7 +25,7 @@ public class VentanaPrincipal extends JFrame implements ActionListener {
         this.setBounds(50, 50, 500, 500);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        botonSupUno.setEnabled(true);
+        //botonSupUno.setEnabled(true);
         configurarContainer();
         instancias();
         acciones();

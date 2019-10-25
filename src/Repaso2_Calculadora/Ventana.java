@@ -9,21 +9,23 @@ public class Ventana extends JFrame implements ActionListener {
     // Declaro contenedor
     Container container;
     // Declaro las variables de todos los botones
-    JButton b0,b1,b2,b3,b4,b5,b6,b7,b8,b9, bSuma, bResta, bMultiplicacion, bDivision, bIgual, bAC, bDEL;
+    JButton b0,b1,b2,b3,b4,b5,b6,b7,b8,b9, bSuma, bResta, bMultiplicacion, bDivision, bIgual, bAC, bCienti,bLog,bCos,bSen,bTag;
     // Texto input
-    JTextField pantalla;
+    JTextField pantalla, pantalla2;
     // Paneles
-    JPanel superior, central, derecha,centralCientifica;
+    JPanel superior, central, derecha,centralCientifica,panelIzquierda;
     // Variables bandera, operacion, tipo de operacion
     boolean operando = false;
     int op1, op2;
     int tipoOperacion;
+    double resultadoDoble;
+    boolean flagNoCientifica = false;
 
     // Instanciar interfaz grafica
     public void initGUI() {
         instancias();
         configurarContainer();
-        setSize(new Dimension(500, 380));
+        setSize(new Dimension(300, 370));
         setLocationRelativeTo(null);
         acciones();
         setVisible(true);
@@ -33,6 +35,7 @@ public class Ventana extends JFrame implements ActionListener {
         container.add(configurarDerecha(), BorderLayout.EAST);
         container.add(configurarSuperior(), BorderLayout.NORTH);
         container.add(configurarCentro(), BorderLayout.CENTER);
+        container.add(configIzquierda(), BorderLayout.WEST);
     }
     // Configurar primer parte del contenedor
     private JPanel configurarCentro() {
@@ -52,15 +55,16 @@ public class Ventana extends JFrame implements ActionListener {
         central.add(b0);
         central.add(bAC);
         central.add(bIgual);
-
         return central;
     }
     // Configurar segunda parte del contenedor
     private JPanel configurarSuperior() {
         superior.setLayout(new BorderLayout());
         // Asignar tamaño de ventana de texto
-        pantalla.setPreferredSize(new Dimension(200,200));
-        superior.add(pantalla, BorderLayout.CENTER);
+        pantalla.setPreferredSize(new Dimension(100,100));
+        pantalla2.setPreferredSize(new Dimension(100,100));
+        superior.add(pantalla, BorderLayout.SOUTH);
+        superior.add(pantalla2, BorderLayout.NORTH);
         return superior;
     }
     private JPanel configurarDerecha() {
@@ -71,9 +75,18 @@ public class Ventana extends JFrame implements ActionListener {
         derecha.add(bResta);
         derecha.add(bMultiplicacion);
         derecha.add(bDivision);
-        derecha.add(bDEL);
-
+        derecha.add(bCienti);
         return derecha;
+    }
+    private JPanel configIzquierda() {
+        // Por defecto tiene flowlayout
+        panelIzquierda.setPreferredSize(new Dimension(100,50));
+        panelIzquierda.setLayout(new GridLayout(4, 1, 0, 0));
+        panelIzquierda.add(bLog);
+        panelIzquierda.add(bCos);
+        panelIzquierda.add(bSen);
+        panelIzquierda.add(bTag);
+        return panelIzquierda;
     }
     // Acciones, en este caso recorro todos los componentes del panel central
     private void acciones() {
@@ -85,10 +98,14 @@ public class Ventana extends JFrame implements ActionListener {
         for (Component item : operaciones) {
             ((JButton) item).addActionListener(this);
         }
+        Component[] cientificos = panelIzquierda.getComponents();
+        for (Component item : cientificos) {
+            ((JButton) item).addActionListener(this);
+        }
     }
     // Instanciamos todos los botones, les damos valor
     private void instancias() {
-        bAC = new JButton("AC");
+        bAC = new JButton("C");
         b0 = new JButton("0");
         b1 = new JButton("1");
         b2 = new JButton("2");
@@ -104,12 +121,19 @@ public class Ventana extends JFrame implements ActionListener {
         bMultiplicacion = new JButton("x");
         bDivision = new JButton("/");
         bIgual = new JButton("=");
-        bDEL = new JButton("DEL");
+        bCienti = new JButton("C/N");
         pantalla = new JTextField();
+        pantalla2 = new JTextField();
         container = this.getContentPane();
         central = new JPanel();
         superior = new JPanel();
         derecha = new JPanel();
+        bLog = new JButton("Ln");
+        bCos = new JButton("COS");
+        bTag = new JButton("TAG");
+        bSen = new JButton("SEN");
+        // Panel cientifica
+        panelIzquierda = new JPanel();
     }
     // Action perfomed definimos qué hace cada boton
     @Override
@@ -179,6 +203,7 @@ public class Ventana extends JFrame implements ActionListener {
             }
         } else if (e.getSource() == bAC) {
                 pantalla.setText("");
+                pantalla2.setText("");
         } else if (e.getSource() == bSuma) {
             operando = true;
             op1 = Integer.valueOf(pantalla.getText());
@@ -191,37 +216,55 @@ public class Ventana extends JFrame implements ActionListener {
             operando = true;
             op1 = Integer.valueOf(pantalla.getText());
             tipoOperacion = 3;
-        }else if (e.getSource() == bDEL) {
-            System.out.printf("Borrar 1");
-            String numerosPantalla = pantalla.getText();
-            System.out.println(numerosPantalla);
-            if(numerosPantalla.length() > 1) {
-                pantalla.setText(numerosPantalla.replace(numerosPantalla.substring(numerosPantalla.length() -1),""));
-            } else if(numerosPantalla.length() == 1){
-                pantalla.setText("");
-            }
         } else if (e.getSource() == bDivision) {
             operando = true;
             op1 = Integer.valueOf(pantalla.getText());
             tipoOperacion = 4;
-        } else if (e.getSource() == bIgual) {
+        }else if (e.getSource() == bCos) {
+            operando = true;
+            op1 = Integer.valueOf(pantalla.getText());
+            System.out.println(op1);
+            String formateoCos = String.format("%s (%d)","COS",op1);
+            pantalla2.setText(formateoCos);
+            tipoOperacion = 5;
+        } else if (e.getSource() == bCienti) {
+          // Desplegar panel cientifica
+            if (panelIzquierda.isShowing()) {
+                container.remove(panelIzquierda);
+            } else {
+                container.add(panelIzquierda, BorderLayout.WEST);
+            }
+            pack();
+        }else if (e.getSource() == bIgual) {
             op2 = Integer.valueOf(pantalla.getText());
             int resultado=0;
             switch (tipoOperacion){
                 case 1:
                     resultado = op1+op2;
+                    flagNoCientifica = true;
                     break;
                 case 2:
                     resultado = op1-op2;
+                    flagNoCientifica = true;
                     break;
                 case 3:
                     resultado = op1*op2;
+                    flagNoCientifica = true;
                     break;
                 case 4:
                     resultado = op1/op2;
+                    flagNoCientifica = true;
                     break;
+                case 5:
+                    double introDoble = op1;
+                    resultadoDoble=Math.cos(introDoble);
+                    System.out.println(resultadoDoble);
+                    break;
+            }if(flagNoCientifica){
+                pantalla2.setText(Integer.toString(resultado));
+            }else{
+                pantalla2.setText(String.valueOf(resultadoDoble));
             }
-            pantalla.setText(Integer.toString(resultado));
         }
     }
 }

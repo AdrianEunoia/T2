@@ -84,7 +84,6 @@ public class Ventana extends JFrame implements ActionListener {
         panelIzquierda.add(new JLabel("PANEL IZQUIEDA"));
 
         cardLayout = new CardLayout();
-
     }
 
 
@@ -115,7 +114,6 @@ public class Ventana extends JFrame implements ActionListener {
     }
 
     private JPanel configInferior() {
-
         panelInferior.add(etiquetaInferior);
         return panelInferior;
     }
@@ -130,8 +128,8 @@ public class Ventana extends JFrame implements ActionListener {
     }
 
     private JPanel configurarCentro() {
-
         // por defecto flowlayout
+        panelCentro.setPreferredSize(new Dimension(300,300));
         panelCentro.setLayout(cardLayout);
         panelCentro.add(panelCentroUno, Constantes.TAG_P1);
         panelCentro.add(panelCentroDos, Constantes.TAG_P2);
