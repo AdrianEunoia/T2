@@ -199,7 +199,6 @@ public class Ventana extends JFrame implements ActionListener {
             }
             else{
                 pantalla.setText("0");
-                //operando=false;
             }
         } else if (e.getSource() == bAC) {
                 pantalla.setText("");
@@ -223,10 +222,27 @@ public class Ventana extends JFrame implements ActionListener {
         }else if (e.getSource() == bCos) {
             operando = true;
             op1 = Integer.valueOf(pantalla.getText());
-            System.out.println(op1);
             String formateoCos = String.format("%s (%d)","COS",op1);
             pantalla2.setText(formateoCos);
             tipoOperacion = 5;
+        }else if (e.getSource() == bSen) {
+            operando = true;
+            op1 = Integer.valueOf(pantalla.getText());
+            String formateoCos = String.format("%s (%d)","SEN",op1);
+            pantalla2.setText(formateoCos);
+            tipoOperacion = 6;
+        }else if (e.getSource() == bTag) {
+            operando = true;
+            op1 = Integer.valueOf(pantalla.getText());
+            String formateoCos = String.format("%s (%d)","TAG",op1);
+            pantalla2.setText(formateoCos);
+            tipoOperacion = 7;
+        }else if (e.getSource() == bLog) {
+            operando = true;
+            op1 = Integer.valueOf(pantalla.getText());
+            String formateoCos = String.format("%s (%d)","LOG10",op1);
+            pantalla2.setText(formateoCos);
+            tipoOperacion = 8;
         } else if (e.getSource() == bCienti) {
           // Desplegar panel cientifica
             if (panelIzquierda.isShowing()) {
@@ -236,6 +252,7 @@ public class Ventana extends JFrame implements ActionListener {
             }
             pack();
         }else if (e.getSource() == bIgual) {
+            operando=false;
             op2 = Integer.valueOf(pantalla.getText());
             int resultado=0;
             switch (tipoOperacion){
@@ -258,12 +275,25 @@ public class Ventana extends JFrame implements ActionListener {
                 case 5:
                     double introDoble = op1;
                     resultadoDoble=Math.cos(introDoble);
-                    System.out.println(resultadoDoble);
+                    break;
+                case 6:
+                    introDoble = op1;
+                    resultadoDoble=Math.sin(introDoble);
+                    break;
+                case 7:
+                    introDoble = op1;
+                    resultadoDoble=Math.tan(introDoble);
+                    break;
+                case 8:
+                    introDoble = op1;
+                    resultadoDoble=Math.log10(introDoble);
                     break;
             }if(flagNoCientifica){
                 pantalla2.setText(Integer.toString(resultado));
+                pantalla.setText("");
             }else{
                 pantalla2.setText(String.valueOf(resultadoDoble));
+                pantalla.setText("");
             }
         }
     }
