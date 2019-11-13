@@ -1,4 +1,4 @@
-package Practica1_Email;
+/*package Practica1_Email;
 
 import javax.swing.*;
 
@@ -13,4 +13,4 @@ public class Entrada {
             }
         });
     }
-}
+}*/
