@@ -1,4 +1,4 @@
-/*package Practica1_Email;
+package Practica1_Email;
 
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeBodyPart;
 import com.sun.xml.internal.messaging.saaj.packaging.mime.internet.MimeMultipart;
@@ -166,5 +166,4 @@ public class Ventana extends JFrame implements ActionListener {
         }
         }
     }
-
-    }*/
+}
