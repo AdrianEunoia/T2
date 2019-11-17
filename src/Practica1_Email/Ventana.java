@@ -120,9 +120,7 @@ public class Ventana extends JFrame implements ActionListener {
         properties.put("mail.smtp.auth", "true");
         properties.put("mail.user", "deaga30@gmail.com");
         properties.put("mail.password", "passPractica");
-        Session session = Session.getInstance(properties, null);
-
-    }
+        session = Session.getInstance(properties, null);    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -135,6 +133,7 @@ public class Ventana extends JFrame implements ActionListener {
             String copiaOcultaCorreo = txtCO.getText();
             String asuntoCorreo = txtAsunto.getText();
             String textoCorreo = txtTexto.getText();
+            // Comprobacion consola...
             System.out.printf("%s %s %s %s %s",paraCorreo,copiaCorreo,copiaOcultaCorreo,asuntoCorreo,textoCorreo);
             MimeMessage mimeMessage = new MimeMessage(session);
             try {
@@ -149,10 +148,21 @@ public class Ventana extends JFrame implements ActionListener {
                 mimeMessage.setContent(mimeMultipart);
 
                 mimeMessage.setFrom(new InternetAddress(properties.getProperty("mail.user")));
-                //InternetAddress[] direcciones = new InternetAddress[]{new InternetAddress(txtPara.getText().toString())};
-                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(txtPara.getText()));
-                mimeMessage.setRecipient(Message.RecipientType.CC,new InternetAddress(txtCC.getText()));
-                mimeMessage.setRecipient(Message.RecipientType.BCC,new InternetAddress(txtCCO.getText()));
+                String destinarios = txtPara.getText();
+                    String[] destinariosEncontrados = destinarios.split(",");
+                    for(String destinarioEncontrado : destinariosEncontrados){
+                        mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(destinarioEncontrado));
+                    }
+                String destinariosCC = txtCC.getText();
+                    String[] destinariosEncontradosCC = destinariosCC.split(",");
+                    for(String destinarioEncontradoCC : destinariosEncontradosCC){
+                        mimeMessage.setRecipient(Message.RecipientType.CC, new InternetAddress(destinarioEncontradoCC));
+                    }
+                String destinariosCCO = txtCC.getText();
+                    String[] destinariosEncontradosCCO = destinariosCCO.split(",");
+                    for(String destinarioEncontradoCCO : destinariosEncontradosCCO){
+                        mimeMessage.setRecipient(Message.RecipientType.BCC, new InternetAddress(destinarioEncontradoCCO));
+                    }
                 mimeMessage.setSubject(txtAsunto.getText());
                 Transport transport = session.getTransport("smtp");
                 transport.connect(properties.getProperty("mail.user"), properties.getProperty("mail.password"));
@@ -163,7 +173,6 @@ public class Ventana extends JFrame implements ActionListener {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-        }
         }
     }
 }
